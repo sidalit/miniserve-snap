@@ -1,5 +1,5 @@
 #!/bin/sh
-# Validate `snap set miniserve ...` and restart the service if it is running.
+# Validate `snap set miniserve ...` and restart the service if it is enabled or running.
 set -eu
 
 port="$(snapctl get port)"
@@ -37,6 +37,7 @@ case "$(snapctl get upload)" in
     ;;
 esac
 
-if snapctl services "$SNAP_INSTANCE_NAME.daemon" | grep -qw active; then
+# Also restart an enabled service that is down, so fixing a bad value brings it back.
+if snapctl services "$SNAP_INSTANCE_NAME.daemon" | grep -qwE 'enabled|active'; then
   snapctl restart "$SNAP_INSTANCE_NAME.daemon"
 fi
