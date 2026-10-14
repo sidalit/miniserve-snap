@@ -2,9 +2,29 @@
 # Validate `snap set miniserve ...` and restart the service if it is running.
 set -eu
 
-case "$(snapctl get port)" in
+port="$(snapctl get port)"
+case "$port" in
   '' | *[!0-9]*)
     echo "port must be a number" >&2
+    exit 1
+    ;;
+esac
+if [ "$port" -lt 1 ] || [ "$port" -gt 65535 ]; then
+  echo "port must be between 1 and 65535" >&2
+  exit 1
+fi
+
+case "$(snapctl get interfaces)" in
+  '' | *[!0-9A-Fa-f.:]*)
+    echo "interfaces must be a single IPv4 or IPv6 address" >&2
+    exit 1
+    ;;
+esac
+
+case "$(snapctl get auth)" in
+  '' | ?*:?*) ;;
+  *)
+    echo "auth must be username:password, username:sha256:hash or username:sha512:hash" >&2
     exit 1
     ;;
 esac
