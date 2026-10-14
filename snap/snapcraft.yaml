@@ -1,0 +1,83 @@
+name: miniserve
+base: core26
+version: '0.35.0'
+title: miniserve
+summary: Serve files over HTTP right now, from the command line
+description: |
+  miniserve is a small, self-contained web server that shares files and
+  folders over HTTP. It supports uploads, authentication, TLS and archive
+  downloads.
+
+  **Examples**
+
+     miniserve ~/Downloads
+     miniserve --port 9000 --auth user:password ~/share
+     miniserve --upload-files ~/inbox
+
+  **Background service**
+
+  The service is installed disabled and listens on 127.0.0.1:8080, serving
+  /var/snap/miniserve/common/www. To configure and start it:
+
+     sudo snap set miniserve port=8080 interfaces=0.0.0.0
+     sudo snap start --enable miniserve
+
+  **File access**
+
+  miniserve can serve files in your home directory. To also serve USB drives
+  and other removable media (/media, /mnt), run:
+
+     sudo snap connect miniserve:removable-media
+license: MIT
+grade: stable
+confinement: strict
+website: https://github.com/svenstaro/miniserve
+source-code: https://github.com/svenstaro/miniserve
+issues: https://github.com/svenstaro/miniserve/issues
+
+platforms:
+  amd64:
+  arm64:
+  armhf:
+  ppc64el:
+  riscv64:
+  s390x:
+
+apps:
+  miniserve:
+    command: bin/miniserve
+    completer: share/bash-completion/completions/miniserve
+    plugs:
+      - home
+      - removable-media
+      - network
+      - network-bind
+  daemon:
+    command: bin/miniserve-daemon
+    daemon: simple
+    install-mode: disable
+    restart-condition: on-failure
+    plugs:
+      - removable-media
+      - network
+      - network-bind
+
+parts:
+  miniserve:
+    plugin: rust
+    source: https://github.com/svenstaro/miniserve.git
+    source-tag: 'v0.35.0'
+    rust-channel: '1.93.0'
+    build-packages: [build-essential]
+    override-build: |
+      craftctl default
+      mkdir -p "$CRAFT_PART_INSTALL/share/bash-completion/completions"
+      "$CRAFT_PART_INSTALL/bin/miniserve" --print-completions bash \
+        > "$CRAFT_PART_INSTALL/share/bash-completion/completions/miniserve"
+      install -Dm644 LICENSE "$CRAFT_PART_INSTALL/share/doc/miniserve/LICENSE"
+
+  daemon:
+    plugin: dump
+    source: snap/local
+    organize:
+      miniserve-daemon: bin/miniserve-daemon
