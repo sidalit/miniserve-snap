@@ -34,6 +34,7 @@ confinement: strict
 website: https://github.com/svenstaro/miniserve
 source-code: https://github.com/svenstaro/miniserve
 issues: https://github.com/svenstaro/miniserve/issues
+contact: https://github.com/sidalit/miniserve-snap/issues
 
 platforms:
   amd64:
