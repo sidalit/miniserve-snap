@@ -1,0 +1,6 @@
+#!/bin/sh
+# Default settings for the background service, matching upstream's systemd unit (localhost only).
+set -eu
+
+mkdir -p "$SNAP_COMMON/www"
+snapctl set port=8080 interfaces=127.0.0.1 path="$SNAP_COMMON/www" upload=false

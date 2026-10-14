@@ -1,0 +1,19 @@
+#!/bin/sh
+# Start the background service with the settings from `snap set miniserve ...`.
+set -eu
+
+MINISERVE_PORT="$(snapctl get port)"
+MINISERVE_INTERFACE="$(snapctl get interfaces)"
+export MINISERVE_PORT MINISERVE_INTERFACE
+
+# Passed through the environment so the password does not show up in `ps`.
+auth="$(snapctl get auth)"
+if [ -n "$auth" ]; then
+  export MINISERVE_AUTH="$auth"
+fi
+
+if [ "$(snapctl get upload)" = true ]; then
+  set -- --upload-files
+fi
+
+exec "$SNAP/bin/miniserve" "$@" -- "$(snapctl get path)"
