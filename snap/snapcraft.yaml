@@ -1,6 +1,6 @@
 name: miniserve
 base: core26
-version: '0.35.0'
+adopt-info: miniserve
 title: miniserve
 summary: Serve files over HTTP right now, from the command line
 description: |
@@ -67,9 +67,13 @@ parts:
   miniserve:
     plugin: rust
     source: https://github.com/svenstaro/miniserve.git
+    # renovate: depName=svenstaro/miniserve
     source-tag: 'v0.35.0'
     rust-channel: '1.93.0'
     build-packages: [build-essential]
+    override-pull: |
+      craftctl default
+      craftctl set version="$(git -C "$CRAFT_PART_SRC" describe --tags --match 'v[0-9]*' | sed 's/^v//')"
     override-build: |
       craftctl default
       mkdir -p "$CRAFT_PART_INSTALL/share/bash-completion/completions"
