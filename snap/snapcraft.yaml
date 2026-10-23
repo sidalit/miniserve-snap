@@ -32,8 +32,12 @@ license: MIT
 grade: stable
 confinement: strict
 website: https://github.com/svenstaro/miniserve
-source-code: https://github.com/svenstaro/miniserve
-issues: https://github.com/svenstaro/miniserve/issues
+source-code:
+  - https://github.com/svenstaro/miniserve
+  - https://github.com/sidalit/miniserve-snap
+issues:
+  - https://github.com/svenstaro/miniserve/issues
+  - https://github.com/sidalit/miniserve-snap/issues
 contact: https://github.com/sidalit/miniserve-snap/issues
 
 platforms:
