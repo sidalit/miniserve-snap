@@ -2,6 +2,7 @@ name: miniserve
 base: core26
 version: '0.35.0'
 title: miniserve
+icon: snap/gui/miniserve.png
 summary: Serve files over HTTP right now, from the command line
 description: |
   miniserve is a small, self-contained web server that shares files and
