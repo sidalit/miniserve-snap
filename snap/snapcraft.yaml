@@ -74,7 +74,8 @@ parts:
     source: https://github.com/svenstaro/miniserve.git
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
     rust-channel: '1.93.0'
-    build-packages: [build-essential]
+    build-packages:
+      - build-essential
     override-build: |
       craftctl default
       mkdir -p "$CRAFT_PART_INSTALL/share/bash-completion/completions"
